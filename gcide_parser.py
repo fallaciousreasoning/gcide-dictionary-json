@@ -44,7 +44,9 @@ def gcide_xml2json(xml, alphabet):
 			continue
 
 		entry = {
-			'synonyms': []
+			'synonyms': [],
+			'antonyms': [],
+			'alternateSpellings': []
 		}
 
 		defn = p.find('def')
@@ -65,12 +67,15 @@ def gcide_xml2json(xml, alphabet):
 		if 'definition' not in entry:
 			continue
 		
-		syn = p.find('syn')
-		if syn != None:
-			synt = syn.get_text()
-			if synt:
-				print('Added synonym for', ent)
-				entry['synonyms'] += [synt]
+		def add_from_tag(name, tagName):
+			tags = p.find_all(tagName)
+			for tag in tags:
+				text = tag.get_text()
+				entry[name] += [text]
+
+		add_from_tag('synonyms', 'sync')
+		add_from_tag('antonyms', 'ant')
+		add_from_tag('alternateSpellings', 'asp')
 
 		dic[ent] += [entry]
 
