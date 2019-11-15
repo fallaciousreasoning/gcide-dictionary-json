@@ -73,7 +73,7 @@ def gcide_xml2json(xml, alphabet):
 				text = tag.get_text()
 				entry[name] += [text]
 
-		add_from_tag('synonyms', 'sync')
+		add_from_tag('synonyms', 'syn')
 		add_from_tag('antonyms', 'ant')
 		add_from_tag('alternateSpellings', 'asp')
 
