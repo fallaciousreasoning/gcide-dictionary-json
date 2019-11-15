@@ -83,8 +83,8 @@ def gcide_xml2json(xml, alphabet):
 
 
 if __name__ == '__main__':
-	# a2z = 'abcdefghijklmnopqrstuvwxyz'
-	a2z = 'a'
+	a2z = 'abcdefghijklmnopqrstuvwxyz'
+	# a2z = 'a'
 	mdic = {}
 	for _ in a2z:
 		fname = 'xml_files/gcide_' + _ + '.xml'
