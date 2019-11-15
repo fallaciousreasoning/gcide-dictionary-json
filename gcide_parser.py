@@ -42,6 +42,11 @@ def gcide_xml2json(xml, alphabet):
 				dic[ent] = []
 		if ent == '':
 			continue
+
+		entry = {
+			'synonyms': []
+		}
+
 		defn = p.find('def')
 		if defn != None:
 			defnt = defn.get_text()
@@ -49,19 +54,32 @@ def gcide_xml2json(xml, alphabet):
 				er = defn.find('er').get_text()
 				if all_lowercase:
 					er = er.lower()
-				dic[ent] += ['___' + er]
+				entry['definition'] = '___' + er
 			else:
 				if remove_as and defn.find('as') != None:
 					defn.find('as').clear()
 					defnt = defn.get_text()
-				dic[ent] += [defnt.strip(' ;.')]
+				entry['definition'] = defnt.strip(' ;.')
+
+		# Don't add empty definitions.
+		if 'definition' not in entry:
+			continue
+		
+		syn = p.find('syn')
+		if syn != None:
+			synt = syn.get_text()
+			if synt:
+				print('Added synonym for', ent)
+				entry['synonyms'] += [synt]
+
+		dic[ent] += [entry]
 
 	return dic
 
 
 if __name__ == '__main__':
-	a2z = 'abcdefghijklmnopqrstuvwxyz'
-	# a2z = 's'
+	# a2z = 'abcdefghijklmnopqrstuvwxyz'
+	a2z = 'a'
 	mdic = {}
 	for _ in a2z:
 		fname = 'xml_files/gcide_' + _ + '.xml'
